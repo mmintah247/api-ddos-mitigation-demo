@@ -1,0 +1,118 @@
+version: "3.9"
+
+services:
+  database:
+    image: mysql:8.0
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: project
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    command: >
+      mysqld --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"   # host:container
+    volumes:
+      - /Users/mmintah/Desktop/virtualenv/opt/project/mysql/data:/var/lib/mysql
+    networks:
+      - project
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$${MYSQL_ROOT_PASSWORD} --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 40s
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      PMA_HOST: database
+      PMA_PORT: 3306
+      PMA_ARBITRARY: "1"
+      UPLOAD_LIMIT: 256M
+      SESSION_SAVE_PATH: /sessions
+    ports:
+      - "8080:80"     # http://localhost:8080
+    volumes:
+      - /Users/mmintah/Desktop/virtualenv/opt/project/phpmyadmin/sessions:/sessions
+      - /Users/mmintah/Desktop/virtualenv/opt/project/phpmyadmin/uploads:/var/www/html/upload
+      - /Users/mmintah/Desktop/virtualenv/opt/project/phpmyadmin/saves:/var/www/html/save
+    networks:
+      - project
+
+# --- API Service with CORRECT Limits for Docker Compose (single host) ---
+  api:
+    build: ./api
+    container_name: api
+    restart: unless-stopped
+    depends_on:
+      database:
+        condition: service_healthy
+    ports:
+      - "5001:5000"
+    environment:
+      - DB_HOST=database
+      - DB_USER=admin
+      - DB_PASSWORD=admin
+      - DB_NAME=project
+    networks:
+      - project
+    # DELETE the "deploy" block and use these direct service keys:
+    mem_limit: 15M       # Sets the maximum memory limit
+    cpu_shares: 2      # Sets the CPU priority/shares (low value for easy exhaustion)
+
+  # --- FRONTEND Service with CORRECT Limits for Docker Compose (single host) ---
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "8081:80"
+    networks:
+      - project
+    mem_limit: 6M       # Sets the maximum memory limit
+    cpu_shares: 2      #
+
+
+# --- METRICS & VISUALIZATION SERVICES ---
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - /Users/mmintah/Desktop/virtualenv/opt/project/grafana/data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus # No longer depends on Loki
+    networks:
+      - project
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - /Users/mmintah/Desktop/virtualenv/opt/project/prometheus/data:/prometheus
+    networks:
+      - project
+
+# --- TOP-LEVEL NETWORKS & VOLUMES ---
+
+
+networks:
+  project:
+    driver: bridge
