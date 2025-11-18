@@ -81,6 +81,17 @@ services:
     mem_limit: 30M       # Sets the maximum memory limit
     cpu_shares: 3      #
 
+  lpar2rrd-docker-agent:
+    image: xorux/lpar2rrd-docker-agent
+    container_name: lpar2rrd-docker-agent
+    hostname: "vulnerable-server"
+    restart: always 
+    environment:
+      - XORMON=167.71.118.73
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - project
 
 
 # --- TOP-LEVEL NETWORKS & VOLUMES ---
