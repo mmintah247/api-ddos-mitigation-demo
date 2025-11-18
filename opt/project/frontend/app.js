@@ -4,7 +4,7 @@ document.getElementById('checkBalanceBtn').addEventListener('click', () => {
     resultDiv.textContent = 'Loading...';
 
     // *** Make sure this points to port 5001 ***
-    fetch(`http://localhost:5001/balance/${accountNumber}`)
+    fetch(`http://165.232.42.130:5001/balance/${accountNumber}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Account not found');
