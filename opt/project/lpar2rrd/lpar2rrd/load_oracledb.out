@@ -1,0 +1,2 @@
+cat: can't open '/home/lpar2rrd/lpar2rrd/tmp/load_oracledb.sh.pid': No such file or directory
+No hosts were found in /home/lpar2rrd/lpar2rrd/etc/web_config/hosts.json to run OracleDB. Check Host Configuration in GUI and configure your databases there.

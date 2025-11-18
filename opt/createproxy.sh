@@ -33,6 +33,10 @@ docker-compose -f docker-compose.mitigated.yml up -d --build
 docker-compose -f docker-compose.mitigated.yml down
 docker-compose -f docker-compose.mitigated.yml up -d --build --force-recreate
 
+docker compose -f  docker-compose.lpar2rrdserver.yml down
+
+docker compose -f  docker-compose.lpar2rrdserver.yml up -d --build --force-recreate
+
 
 
 
@@ -49,3 +53,10 @@ http://165.232.42.130:8080/
 
 #api
 http://165.232.42.130:5001/balance/1005880649042
+
+
+#observability 
+
+167.71.118.73
+
+

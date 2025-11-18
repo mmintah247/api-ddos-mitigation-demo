@@ -1,0 +1,30 @@
+LPAR2RRD installation under user : "lpar2rrd"
+ make sure it is realy the user which should own it
+
+Where LPAR2RRD will be installed [/home/lpar2rrd/lpar2rrd]:
+
+Extracting distribution
+Copy distribution to the target location: /home/lpar2rrd/lpar2rrd
+Copy GUI files : /home/lpar2rrd/lpar2rrd/www
+Setting up directory permissions
+Configuring /home/lpar2rrd/lpar2rrd/etc/lpar2rrd.cfg
+Could not be found directory with ssh-keys (/home/lpar2rrd/.ssh)
+ You wil need to do manually following:
+ 1. create ssh-keys (ssh-keygen -t dsa)
+ 2. copy keys to a new file and assign read rights for the web user : nobody
+   # cp /home/lpar2rrd/.ssh/id_dsa /home/lpar2rrd/.ssh/realt_dsa
+   under root account :
+   # chown nobody /home/lpar2rrd/.ssh/realt_dsa
+   # chmod 600 /home/lpar2rrd/.ssh/realt_dsa
+
+
+Warning: increase stack ulimit for lpar2rrd user, it is actually too low (8192)
+Assure that the same limits has even the web user (apache/nobody/http)
+  under root: vi /etc/security/limits.conf
+    @lpar2rrd        hard    stack           524288
+    @lpar2rrd        soft    stack           524288
+
+
+Installation has finished
+Follow post-install instructions at:
+  http://www.lpar2rrd.com/install.htm

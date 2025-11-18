@@ -1,0 +1,31 @@
+services:
+  lpar2rrd:
+    image: xorux/lpar2rrd
+    container_name: lpar2rrd
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      - TIMEZONE=Africa/Accra
+    volumes:
+      - ./lpar2rrd:/home/lpar2rrd:Z
+    networks:
+      - lpar2rrdnet
+
+  lpar2rrd-docker-agent:
+    image: xorux/lpar2rrd-docker-agent
+    container_name: lpar2rrd-docker-agent
+    hostname: "lpar2rrd"
+    restart: always
+    depends_on:
+      - lpar2rrd   
+    environment:
+      - XORMON=167.71.118.73
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - lpar2rrdnet
+
+networks:
+  lpar2rrdnet:
+    driver: bridge
