@@ -1,24 +1,55 @@
 services:
-  lpar2rrd:
-    image: xorux/lpar2rrd
-    container_name: lpar2rrd
-    restart: always
-    ports:
-      - "80:80"
+  timescaledb:
+    image: timescale/timescaledb:latest-pg16
+    container_name: timescaledb
+    init: true
+    restart: unless-stopped
+    ulimits:
+      core: 0
     environment:
-      - TIMEZONE=Africa/Accra
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "admin@2025"
+      TZ: "Africa/Accra"
     volumes:
-      - ./lpar2rrd:/home/lpar2rrd:Z
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - lpar2rrdnet
+
+  xormon:
+    image: xorux/xormon-ng:latest
+    container_name: xormon-ng
+    init: true
+    restart: unless-stopped
+    ulimits:
+      core: 0
+    depends_on:
+      - timescaledb
+    environment:
+      APP_PORT: "8443"
+      TZ: "Africa/Accra"
+      DB_HOST: "timescaledb"
+      DB_PORT: "5432"
+      DB_USERNAME: "postgres"
+      DB_PASSWORD: "admin@2025"
+      DB_DATABASE: "xormon"
+      APP_DEBUG: "false"
+      APP_SECRET: "projectsecretkey"
+    volumes:
+      - ./files:/app/server-nest/files:Z
+    ports:
+      - "8443:8443"
+      - "8162:8162"
     networks:
       - lpar2rrdnet
 
   lpar2rrd-docker-agent:
     image: xorux/lpar2rrd-docker-agent
     container_name: lpar2rrd-docker-agent
-    hostname: "lpar2rrd"
+    init: true                      
+    hostname: "${HOSTNAME}"          
     restart: always
-    depends_on:
-      - lpar2rrd   
     environment:
       - XORMON=167.71.118.73
     volumes:
