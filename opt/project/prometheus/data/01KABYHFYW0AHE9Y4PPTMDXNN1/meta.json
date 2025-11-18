@@ -1,0 +1,18 @@
+{
+	"ulid": "01KABYHFYW0AHE9Y4PPTMDXNN1",
+	"minTime": 1763474401254,
+	"maxTime": 1763481600000,
+	"stats": {
+		"numSamples": 769680,
+		"numFloatSamples": 769680,
+		"numSeries": 1069,
+		"numChunks": 6417
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01KABYHFYW0AHE9Y4PPTMDXNN1"
+		]
+	},
+	"version": 1
+}
