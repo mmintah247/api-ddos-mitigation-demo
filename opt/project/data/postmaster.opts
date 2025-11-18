@@ -1,1 +1,1 @@
-/usr/local/bin/postgres
+/usr/local/bin/postgres "-c" "max_connections=200" "-c" "shared_buffers=512MB"
