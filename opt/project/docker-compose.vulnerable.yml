@@ -64,8 +64,8 @@ services:
       - DB_NAME=project
     networks:
       - project
-    mem_limit: 30M       
-    cpu_shares: 3
+    mem_limit: 100M       
+    cpu_shares: 5
 
   # --- FRONTEND Service with CORRECT Limits for Docker Compose (single host) ---
   frontend:
