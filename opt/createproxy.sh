@@ -41,7 +41,7 @@ docker compose -f  docker-compose.lpar2rrdserver.yml up -d --build --force-recre
 
 
 #cloud UAT
-wrk -t2 -c5000 -d120s --latency http://165.232.42.130:5001/balance/
+wrk -t4 -c5000 -d130s --latency http://165.232.42.130:5001/balance/
 
 #webpage
 http://165.232.42.130:8081/
@@ -52,6 +52,9 @@ http://165.232.42.130:8080/
 
 #api
 http://165.232.42.130:5001/balance/1005880649042
+
+
+docker logs -f --tail 10 api
 
 
 #observability 
