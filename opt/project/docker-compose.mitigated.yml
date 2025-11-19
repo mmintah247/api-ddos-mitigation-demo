@@ -51,13 +51,17 @@ services:
     build: ./api
     container_name: api
     restart: unless-stopped
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
     depends_on:
       database:
         condition: service_healthy
     environment:
       - DB_HOST=database
       - DB_USER=admin
-      - DB_PASSWORD=admin
+      - DB_PASSWORD=admin@2025
       - DB_NAME=project
     networks:
       - project
@@ -88,31 +92,31 @@ services:
         - project
 
 
-  grafana:
-    image: grafana/grafana-oss:latest
-    container_name: grafana
-    restart: unless-stopped
-    ports:
-      - "3000:3000"
-    volumes:
-      - /Users/mmintah/Desktop/virtualenv/opt/project/grafana/data:/var/lib/grafana
-      - ./grafana/provisioning:/etc/grafana/provisioning
-    depends_on:
-      - prometheus 
-    networks:
-      - project
-
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    restart: unless-stopped
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - /Users/mmintah/Desktop/virtualenv/opt/project/prometheus/data:/prometheus
-    networks:
-      - project
+#  grafana:
+#    image: grafana/grafana-oss:latest
+#    container_name: grafana
+#    restart: unless-stopped
+#    ports:
+#      - "3000:3000"
+#    volumes:
+#      - /Users/mmintah/Desktop/virtualenv/opt/project/grafana/data:/var/lib/grafana
+#      - ./grafana/provisioning:/etc/grafana/provisioning
+#    depends_on:
+#      - prometheus 
+#    networks:
+#      - project
+#
+#  prometheus:
+#    image: prom/prometheus:latest
+#    container_name: prometheus
+#    restart: unless-stopped
+#    ports:
+#      - "9090:9090"
+#    volumes:
+#      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+#      - /Users/mmintah/Desktop/virtualenv/opt/project/prometheus/data:/prometheus
+#    networks:
+#      - project
 
 
 
