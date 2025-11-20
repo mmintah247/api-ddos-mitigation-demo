@@ -67,8 +67,8 @@ services:
       - DB_NAME=project
     networks:
       - project
-    mem_limit: 2g    
-    cpus: 2.5
+    mem_limit: 300M    
+    cpus: 4
     #mem_limit: 100M       
     #cpu_shares: 5
 
