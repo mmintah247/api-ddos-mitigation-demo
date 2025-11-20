@@ -18,8 +18,6 @@ services:
       - max_connections=200
       - -c
       - shared_buffers=512MB
-    #ports:
-    #  - "5432:5432"
     networks:
       - lpar2rrdnet
 
@@ -49,19 +47,6 @@ services:
       - "8162:8162"
     networks:
       - lpar2rrdnet
-
-  #lpar2rrd-docker-agent:
-  #  image: xorux/lpar2rrd-docker-agent
-  #  container_name: lpar2rrd-docker-agent
-  #  init: true                      
-  #  hostname: "${HOSTNAME}"          
-  #  restart: always
-  #  environment:
-  #    - XORMON=167.71.118.73
-  #  volumes:
-  #    - /var/run/docker.sock:/var/run/docker.sock:ro
-  #  networks:
-  #    - lpar2rrdnet
 
 networks:
   lpar2rrdnet:
