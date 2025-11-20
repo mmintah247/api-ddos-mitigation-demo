@@ -4,7 +4,7 @@
 
 ### Payload Test to simulate DDOS attack
 ```bash
-wrk -t10 -c50000 -d30s --latency http://165.232.42.130:5001/balance/
+wrk -t4 -c6000 -d130s --latency http://165.232.42.130:5001/balance/
 ```
 
 ### stop and start services Services

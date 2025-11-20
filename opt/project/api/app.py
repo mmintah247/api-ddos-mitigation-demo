@@ -4,7 +4,7 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Enable Cross-Origin requests for the frontend
+CORS(app)  
 
 def get_db_connection():
     """Establishes connection to the MySQL database."""
@@ -29,7 +29,6 @@ def get_balance(account_number):
 
     cursor = conn.cursor(dictionary=True)
     
-    # Use the 'formatted_balance' column we created
     query = "SELECT full_name, formatted_balance FROM accounts WHERE account_number = %s"
     
     try:
