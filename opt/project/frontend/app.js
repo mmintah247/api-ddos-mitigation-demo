@@ -3,7 +3,6 @@ document.getElementById('checkBalanceBtn').addEventListener('click', () => {
     const resultDiv = document.getElementById('result');
     resultDiv.textContent = 'Loading...';
 
-    // *** Make sure this points to port 5001 ***
     fetch(`http://206.189.121.14:5001/balance/${accountNumber}`)
         .then(response => {
             if (!response.ok) {

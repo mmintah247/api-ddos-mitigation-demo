@@ -13,7 +13,7 @@ services:
     command: >
       mysqld --default-authentication-plugin=mysql_native_password --lower-case-table-names=2 
     ports:
-      - "3306:3306"   # host:container
+      - "3306:3306"   
     volumes:
       - ./mysql/data:/var/lib/mysql
     networks:
@@ -39,7 +39,7 @@ services:
       UPLOAD_LIMIT: 256M
       SESSION_SAVE_PATH: /sessions
     ports:
-      - "8080:80"     # http://localhost:8080
+      - "8080:80"     
     volumes:
       - ./phpmyadmin/sessions:/sessions
       - ./phpmyadmin/uploads:/var/www/html/upload
@@ -47,7 +47,6 @@ services:
     networks:
       - project
 
-# --- API Service with CORRECT Limits for Docker Compose (single host) ---
   api:
     build: ./api
     container_name: api
@@ -71,7 +70,6 @@ services:
     mem_limit: 100M       
     cpu_shares: 5
 
-  # --- FRONTEND Service with CORRECT Limits for Docker Compose (single host) ---
   frontend:
     build: ./frontend
     container_name: frontend
@@ -82,8 +80,8 @@ services:
       - "8081:80"
     networks:
       - project
-    mem_limit: 30M       # Sets the maximum memory limit
-    cpu_shares: 3      #
+    mem_limit: 30M     
+    cpu_shares: 3      
 
   lpar2rrd-docker-agent:
     image: xorux/lpar2rrd-docker-agent
@@ -96,9 +94,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - project
-
-
-# --- TOP-LEVEL NETWORKS & VOLUMES ---
 
 
 networks:

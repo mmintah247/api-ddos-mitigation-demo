@@ -8,7 +8,7 @@ docker network create proxy
 
 ## Load Testing
 
-### Payload Test
+### Payload Test to simulate DDOS attack
 ```bash
 wrk -t2 -c2000 -d120s --latency http://206.189.121.14:5001/balance/
 ```
